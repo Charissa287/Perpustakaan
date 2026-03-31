@@ -1,0 +1,83 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Student {
+  id      Int     @id @default(autoincrement())
+  nis     String  @unique
+  name    String
+  email   String? @unique
+  password String
+  userRole UserRole @default(STUDENT)
+
+  peminjaman peminjamanBuku[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Walas {
+  id_walas   Int      @id @default(autoincrement())
+  nis        String   @unique
+  name_walas String
+  no_telp    String
+  alamat     String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Book {
+  id     Int    @id @default(autoincrement())
+  title  String
+  author String
+  year   Int
+  stok   Int @default(1)
+
+  peminjaman peminjamanBuku[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model peminjamanBuku {
+  id_peminjaman   Int       @id @default(autoincrement())
+  id_student      Int       @map("id_students")
+  id_buku         Int
+  student         Student   @relation(fields: [id_student], references: [id])
+  book            Book      @relation(fields: [id_buku], references: [id])
+  Tanggal_Pinjam  DateTime  @default(now())
+  Tanggal_Kembali DateTime?
+  pengembalian Pengembalian?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  status String @default("DIPINJAM")
+}
+
+enum UserRole {
+  ADMIN
+  PETUGAS
+  STUDENT
+}
+
+model Pengembalian {
+  id_pengembalian Int            @id @default(autoincrement())
+  id_peminjaman   Int            @unique
+  peminjamanBuku  peminjamanBuku @relation(fields: [id_peminjaman], references: [id_peminjaman])
+
+  tanggal_kembali DateTime @default(now())
+  denda           Int      @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
