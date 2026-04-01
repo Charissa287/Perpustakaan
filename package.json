@@ -10,7 +10,6 @@
     "start:prod": "node dist/main",
 
     "prisma:deploy": "prisma migrate deploy",
-    "postinstall": "npx prisma generate"
   },
   "dependencies": {},
   "devDependencies": {}
