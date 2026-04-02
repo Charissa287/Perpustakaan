@@ -3,7 +3,7 @@ import {
   NotFoundException,
   ForbiddenException,
 } from '@nestjs/common';
-import { PrismaService } from '../../prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { CreatePeminjamanBukuDto } from './dto/create-peminjaman-buku.dto';
 import { UserRole } from '@prisma/client'
 
