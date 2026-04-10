@@ -11,9 +11,12 @@ export class bookService {
     return this.prisma.book.create({ data: dto });
   }
 
-  async findAll() {
-    return this.prisma.book.findMany({ orderBy: { id: 'desc' } });
-  }
+  async remove(id: number) {
+  await this.findOne(id);
+  return this.prisma.book.delete({
+    where: { id },
+  });
+}
 
   async findOne(id: number) {
     const book = await this.prisma.book.findUnique({ where: { id } });
@@ -30,21 +33,19 @@ export class bookService {
     });
   }
 
-  async remove(id: number) {
-    // pastikan ada dulu
-    await this.findOne(id);
-    return this.prisma.book.delete({ where: { id } });
-  }
-  async findByTitle(title: string) {
+ async findAll(title?: string) {
+  const data = await this.prisma.book.findMany();
+
+  console.log("DATA DB:", data); // 🔥 penting
+
   return this.prisma.book.findMany({
-    where: {
-      title: {
-        contains: title,
-      },
-    },
-    orderBy: { id: 'desc' },
+    where: title
+      ? {
+          title: {
+            contains: title,
+          },
+        }
+      : {},
   });
 }
 }
-
-

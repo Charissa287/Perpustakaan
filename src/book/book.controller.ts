@@ -25,14 +25,11 @@ import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 export class bookController {
   constructor(private readonly bookService: bookService) {}
 
-  //@UseGuards(JwtAuthGuard)
   @Get()
-  findAll(@Query('title') title?: string) {
-    if (title) {
-      return this.bookService.findByTitle(title);
-    }
-    return this.bookService.findAll();
-  }
+findAll(@Query('title') title?: string) {
+  return this.bookService.findAll(title);
+}
+
 
   @UseGuards(JwtAuthGuard)
   @Get(':id')
