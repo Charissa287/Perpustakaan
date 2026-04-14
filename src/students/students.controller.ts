@@ -8,6 +8,7 @@ import {
   Put,
 } from '@nestjs/common';
 import { ApiBody } from '@nestjs/swagger';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 import { StudentsService } from './students.service';
 import { CreateStudentDto } from './dto/create-student.dto';
@@ -21,6 +22,7 @@ import { UserRole } from '@prisma/client';
 export class StudentsController {
   constructor(private readonly studentsService: StudentsService) {}
 
+  @ApiBearerAuth() 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
   @Post()
@@ -28,6 +30,7 @@ export class StudentsController {
     return this.studentsService.create(dto);
   }
 
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
   @Post('admin')
@@ -35,6 +38,7 @@ export class StudentsController {
     return this.studentsService.createAdmin(dto);
   }
 
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
   @Post('petugas')
@@ -45,6 +49,7 @@ export class StudentsController {
   // =====================
   // GET / FILTER
   // =====================
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
   @Get()
