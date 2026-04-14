@@ -8,6 +8,7 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 import { PeminjamanBukuService } from './peminjaman-buku.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -22,6 +23,7 @@ export class PeminjamanBukuController {
 
   // 🔐 ADMIN & PETUGAS → lihat semua
   @Get()
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.PETUGAS)
   findAll(
@@ -33,6 +35,7 @@ export class PeminjamanBukuController {
 
   // 🔐 ADMIN, PETUGAS, STUDENT (cek kepemilikan)
   @Get(':id')
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   findOne(
     @Param('id') id: string,
@@ -43,6 +46,7 @@ export class PeminjamanBukuController {
 
   // 🔐 ADMIN, PETUGAS, STUDENT (pakai NIS sendiri)
   @Get('by-nis/:nis')
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   findByNis(
     @Param('nis') nis: string,
@@ -52,6 +56,7 @@ export class PeminjamanBukuController {
   }
 
   @Post()
+  @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 create(
   @Body() dto: CreatePeminjamanBukuDto,

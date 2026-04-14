@@ -5,6 +5,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { UserRole } from '@prisma/client';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('pengembalian')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -13,6 +14,7 @@ export class PengembalianController {
 
   // 🔐 ADMIN & PETUGAS
   @Post(':id_peminjaman')
+  @ApiBearerAuth()
   @Roles(UserRole.ADMIN, UserRole.PETUGAS)
   create(@Param('id_peminjaman') id: string) {
     return this.service.create(Number(id));
@@ -20,6 +22,7 @@ export class PengembalianController {
 
   // 🔐 ADMIN & PETUGAS
   @Get()
+  @ApiBearerAuth()
   @Roles(UserRole.ADMIN, UserRole.PETUGAS)
   findAll() {
     return this.service.findAll();
