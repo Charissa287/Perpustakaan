@@ -115,8 +115,16 @@ async findByName(name: string) {
 }
 
 async resetPassword(id: number, newPassword: string) {
-  const hashed = await bcrypt.hash(newPassword, 10);
+  if (!newPassword) {
+    throw new NotFoundException('Password baru tidak boleh kosong');
+  }
 
+  const student = await this.prisma.student.findUnique({ where: { id } });
+  if (!student) {
+    throw new NotFoundException('Student tidak ditemukan');
+  }
+
+  const hashed = await bcrypt.hash(newPassword, 10);
   return this.prisma.student.update({
     where: { id },
     data: { password: hashed },

@@ -7,6 +7,7 @@ import {
   Query,
   Put,
 } from '@nestjs/common';
+import { ApiBody } from '@nestjs/swagger';
 
 import { StudentsService } from './students.service';
 import { CreateStudentDto } from './dto/create-student.dto';
@@ -64,6 +65,13 @@ export class StudentsController {
     return this.studentsService.findAll();
   }
 
+@ApiBody({
+  schema: {
+    properties: {
+      password: { type: 'string', example: 'passwordbaru123' }
+    }
+  }
+})
   @Put(':id/reset-password')
 resetPassword(
   @Param('id') id: string,
